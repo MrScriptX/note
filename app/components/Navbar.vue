@@ -6,6 +6,11 @@
                     <Label text="Home Tab Content" class="h2 text-center" />
                 </StackLayout>
             </TabViewItem>
+            <TabViewItem title="Home" iconSource="res://home">
+                <StackLayout class="p-20">
+                    <DailyActivity />
+                </StackLayout>
+            </TabViewItem>
             <TabViewItem title="Settings" iconSource="res://settings">
                 <StackLayout class="p-20">
                     <Label text="Settings Tab Content" class="h2 text-center" />
@@ -19,8 +24,16 @@
 import Vue from "nativescript-vue";
 import Component from "vue-class-component";
 
-@Component
-export default class TabNavigation extends Vue { }
+import DailyActivity from "./Daily.vue";
+
+@Component({
+    components: {
+        DailyActivity
+    }
+})
+export default class TabNavigation extends Vue {
+
+}
 </script>
   
 <style scoped>

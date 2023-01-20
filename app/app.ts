@@ -9,7 +9,7 @@ Vue.config.silent = !__DEV__
 
 Vue.use(Vuex)
 
-import routine from '@/store/routine';
+import routine from '~/store/day';
 
 new Vue({
   render: (h) => h('frame', [h(Home)]),
