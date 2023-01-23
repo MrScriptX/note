@@ -6,14 +6,18 @@
 
 <script lang="ts">
 import Vue from 'nativescript-vue';
-import { Button, StackLayout, EventData, Dialogs, ListView } from '@nativescript/core';
 import Component from 'vue-class-component';
+import { StackLayout, EventData, Dialogs } from '@nativescript/core';
+import ActivityCard from './ActivityCard.vue';
 
 @Component({
     components: {
+        ActivityCard
     }
 })
 export default class YourDay extends Vue {
+    public activities: ActivityCard[] = [];
+
     public AddActivity(args: EventData): void {
         const actionOptions = {
             title: 'Ajouter une activité',
