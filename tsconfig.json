@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "es2017",
+    "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": ["dom", "es2017"],
+    "lib": ["dom", "esnext"],
     "sourceMap": true,
     "noEmitHelpers": true,
     "importHelpers": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["app/*"],
-      "@/*": ["app/*"]
+      "~/*": ["src/*"],
+      "@/*": ["src/*"]
     },
     "typeRoots": ["types"],
     "types": ["node"],
@@ -21,6 +21,6 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true
   },
-  "include": ["app", "types"],
+  "include": ["src", "types"],
   "exclude": ["node_modules", "platforms"]
 }
