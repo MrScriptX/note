@@ -1,5 +1,10 @@
 <template>
     <StackLayout>
+        <ListView v-for="activity in activities" @itemTap="">
+            <v-template>
+                <ActivityCard :category="activity.category" />
+            </v-template>
+        </ListView>
         <Button text="Update" @tap="AddActivity"></Button>
     </StackLayout>
 </template>
@@ -9,6 +14,7 @@ import Vue from 'nativescript-vue';
 import Component from 'vue-class-component';
 import { StackLayout, EventData, Dialogs } from '@nativescript/core';
 import ActivityCard from './ActivityCard.vue';
+import activity from '../../types/activity';
 
 @Component({
     components: {
@@ -16,24 +22,27 @@ import ActivityCard from './ActivityCard.vue';
     }
 })
 export default class YourDay extends Vue {
-    public activities: ActivityCard[] = [];
+    public activities: activity[] = [
+        { category: 'Sport' }
+    ];
+
+    private categories: string[] = ['Sport', 'Lecture', 'Ecriture', 'Dessin', 'Travail', 'Culture', 'Sortie'];
 
     public AddActivity(args: EventData): void {
         const actionOptions = {
             title: 'Ajouter une activité',
             message: 'Choissisez la catégories',
             cancelButtonText: 'Cancel',
-            actions: ['Sport', 'Lecture', 'Ecriture', 'Dessin', 'Travail', 'Culture', 'Sortie'],
+            actions: this.categories,
             cancelable: true // Android only
         };
 
         Dialogs.action(actionOptions).then(result => {
-            console.log('Dialog result: ', result)
-            if (result === 'Options1') {
-                // Do action 1
-            } else if (result === 'Option2') {
-                // Do action 2
-            }
+            console.log('Activity chosen: ', result)
+
+            this.activities.push({
+                category: result
+            });
         });
     }
 }
