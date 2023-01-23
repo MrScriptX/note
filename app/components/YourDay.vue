@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import Vue from 'nativescript-vue';
-import { Button, StackLayout, EventData, Dialogs } from '@nativescript/core';
+import { Button, StackLayout, EventData, Dialogs, ListView } from '@nativescript/core';
 import Component from 'vue-class-component';
 
 @Component({
@@ -16,10 +16,10 @@ import Component from 'vue-class-component';
 export default class YourDay extends Vue {
     public AddActivity(args: EventData): void {
         const actionOptions = {
-            title: 'Race selection',
-            message: 'Choose your race',
+            title: 'Ajouter une activité',
+            message: 'Choissisez la catégories',
             cancelButtonText: 'Cancel',
-            actions: ['Human', 'Elf', 'Dwarf', 'Orc', 'Unicorn'],
+            actions: ['Sport', 'Lecture', 'Ecriture', 'Dessin', 'Travail', 'Culture', 'Sortie'],
             cancelable: true // Android only
         };
 
