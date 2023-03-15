@@ -2,7 +2,9 @@
     <StackLayout>
         <SplitMenu></SplitMenu>
         <StackLayout class="calendar-page">
-            <label>Title</label>
+            <FlexboxLayout>
+                <label>{{ current_day }} {{ current_month }}</label>
+            </FlexboxLayout>
             <Day v-for="item in data"></Day>
         </StackLayout>
     </StackLayout>
@@ -32,6 +34,16 @@ export default class Calendar extends Vue {
         { dish: "swandwich", date: "2023-03-21" },
         { dish: "restaurant", date: "2023-03-22" }
     ]
+
+    public current_day: number = 0;
+    public current_month : string = '';
+
+    beforeMount() {
+        const today = new Date();
+
+        this.current_day = today.getDate();
+        this.current_month = today.toLocaleString('default', { month: 'short' });
+    }
 }
 </script>
 
