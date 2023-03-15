@@ -9,10 +9,11 @@
 				<TabViewItem title="Home">
 					<Label text="Home"></Label>
 				</TabViewItem>
-				<TabViewItem title="Your Day">
-					<StackLayout>
-						<YourDay></YourDay>
-					</StackLayout>
+				<TabViewItem title="Food">
+					<Calendar />
+				</TabViewItem>
+				<TabViewItem title="Settings">
+					<Settings />
 				</TabViewItem>
 			</TabView>
 		</GridLayout>
@@ -21,12 +22,14 @@
 
 <script lang="ts">
 import Vue from "nativescript-vue";
-import YourDay from "./YourDay.vue";
-import { StackLayout, TabView } from "@nativescript/core";
+import Calendar from "./Calendar.vue";
+import Settings from "./Settings.vue";
+import { StackLayout, TabView, TabViewItem } from "@nativescript/core";
 
 export default Vue.extend({
 	components: {
-		YourDay
+    	Calendar,
+		Settings
 	}
 });
 </script>
@@ -41,7 +44,6 @@ export default Vue.extend({
 
 .info {
 	font-size: 20;
-	horizontal-align: center;
 	vertical-align: center;
 }
 </style>
