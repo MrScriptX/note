@@ -1,9 +1,9 @@
 <template>
     <FlexboxLayout flexDirection="column" class="day-card theme-peaceful-cottage" :class="color">
-        <label class="title">{{ category }}</label>
+        <label class="title">{{ data.category }}</label>
         <FlexboxLayout flexDirection="row">
-            <label class="task">{{ name }}</label>
-            <label class="time">{{ time }}</label>
+            <label class="task">{{ data.name }}</label>
+            <label v-if="data.time_start" class="time">{{ data.time_start }}</label>
         </FlexboxLayout>
     </FlexboxLayout>
 </template>
@@ -14,14 +14,15 @@ import { Prop } from 'vue-property-decorator'
 import Component from 'vue-class-component';
 import { FlexboxLayout } from '@nativescript/core';
 
+// types
+import task from '~/types/task'
+
 @Component({
 })
 export default class DayCard extends Vue {
-    @Prop() category!: String
-    @Prop() name!: String
-    @Prop() time!: String
     @Prop() id!: number
     @Prop() color!: String
+    @Prop() data!: task
 
     beforeMount() {
     }
