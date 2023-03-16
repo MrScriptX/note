@@ -38,6 +38,10 @@ export default Vue.extend({
 @import '@nativescript/theme/scss/variables/blue';
 
 // Custom styles
+Page {
+	background-color: rgba($color: #000000, $alpha: 0.075);
+}
+
 .fas {
 	@include colorize($color: accent);
 }

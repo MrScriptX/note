@@ -6,16 +6,38 @@
 
 // Font icon class
 .fab {
-  font-family: 'Font Awesome 5 Brands', 'fa-brands-400';
-  font-weight: 400;
+    font-family: 'Font Awesome 5 Brands', 'fa-brands-400';
+    font-weight: 400;
 }
 
 .fas {
-  font-family: 'Font Awesome 5 Free', 'fa-solid-900';
-  font-weight: 900;
+    font-family: 'Font Awesome 5 Free', 'fa-solid-900';
+    font-weight: 900;
 }
 
 .far {
-  font-family: 'Font Awesome 5 Free', 'fa-regular-400';
-  font-weight: 400;
+    font-family: 'Font Awesome 5 Free', 'fa-regular-400';
+    font-weight: 400;
+}
+
+@mixin themable($theme-name, $color1, $color2, $color3, $color4) {
+    .day-card {
+        &.#{$theme-name} {
+            &.color1 {
+                background-color: $color1;
+            }
+
+            &.color2 {
+                background-color: $color2;
+            }
+
+            &.color3 {
+                background-color: $color3;
+            }
+
+            &.color4 {
+                background-color: $color4;
+            }
+        }
+    }
 }
