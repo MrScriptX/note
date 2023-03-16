@@ -101,6 +101,7 @@ export default class Calendar extends Vue {
     .header {
         margin: 0 10;
         margin-bottom: 20;
+        color: #000;
 
         .date {
             font-family: 'DMSans-Bold';
