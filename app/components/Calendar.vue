@@ -3,11 +3,15 @@
         <SplitMenu margin="5 0"></SplitMenu>
         <StackLayout class="calendar-page" height="100%">
             <FlexboxLayout class="header" flexDirection="row">
-                <GridLayout columns="5*, 3*" rows="75, 75">
-                    <Label class="date" row="0" col="0">{{ date.day }}</Label>
-                    <Label class="date" row="1" col="0">{{ date.month }}</Label>
-                    <label class="time" row="0" col="1">{{ time }}</label>
-                    <Button class="action-button" row="1" col="1" text="+" @tap="onTapAdd"></Button>
+                <GridLayout columns="5*, 3*" rows="25, 80, 75">
+                    <label class="year" row="0" col="0">{{ date.year }}</label>
+                    <Label class="date" row="1" col="0">{{ date.day }}.{{ pad(date.month, 2) }}</Label>
+                    <Label class="date" row="2" col="0">{{ months[date.month] }}</Label>
+                    <StackLayout row="1" col="1" class="clock">
+                        <label class="time">{{ time }}</label>
+                        <label class="day">{{ days[date.week_day] }}</label>
+                    </StackLayout>
+                    <Button class="action-button" row="2" col="1" text="+" @tap="onTapAdd"></Button>
                 </GridLayout>
             </FlexboxLayout>
             <ScrollView height="100%" orientation="vertical">
@@ -22,7 +26,7 @@
 <script lang="ts">
 import Vue from 'nativescript-vue';
 import Component from 'vue-class-component';
-import { EventData, FlexboxLayout, ScrollView, StackLayout, Label, AbsoluteLayout, GridLayout, capitalizationType, inputType, PromptOptions, PromptResult, prompt, Button, Page } from '@nativescript/core';
+import { EventData, FlexboxLayout, ScrollView, StackLayout, Label, GridLayout, Button } from '@nativescript/core';
 
 // components
 import Day from './Calendar/Day.vue';
@@ -51,11 +55,14 @@ export default class Calendar extends Vue {
         { category: "Food", name: "restaurant", date: "2023-03-22" }
     ]
 
-    private months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+    public months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+    public days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satursday"];
 
     public date = {
         day: 0,
-        month: ''
+        month: 0,
+        year: 0,
+        week_day: 0
     };
 
     public time = '';
@@ -64,7 +71,9 @@ export default class Calendar extends Vue {
         const today = new Date();
 
         this.date.day = today.getDate();
-        this.date.month = this.months[today.getMonth()];
+        this.date.month = today.getMonth();
+        this.date.year = today.getFullYear();
+        this.date.week_day = today.getDay();
 
         setInterval(this.update_time, 2000);
     }
@@ -86,6 +95,10 @@ export default class Calendar extends Vue {
 
             });
     }
+
+    pad(num: number, length: number) {
+        return String(num).padStart(length, '0');
+    }
 }
 </script>
 
@@ -99,16 +112,26 @@ export default class Calendar extends Vue {
     background-color: #fff;
 
     .header {
-        margin: 0 10;
-        margin-bottom: 20;
+        margin: 20 10;
         color: #000;
+        line-height: 0;
 
-        .date {
-            font-family: 'DMSans-Bold';
-            font-size: 75;
-            font-weight: bold;
+        .clock {
+            border-left-width: 1;
+        }
+
+        .year {
+            font-family: 'DMSans-Regular';
+            font-size: 20;
+            margin-left: 5;
+        }
+
+        .day {
+            text-align: right;
+            font-size: 15;
             margin: 0;
             padding: 0;
+            line-height: 0;
         }
 
         .time {
@@ -116,9 +139,20 @@ export default class Calendar extends Vue {
             font-size: 30;
 
             text-align: right;
+            line-height: 0;
 
+            margin: 0;
+            padding: 0;
             margin-top: 15;
-            border-left-width: 1;
+        }
+
+        .date {
+            font-family: 'DMSans-Bold';
+            font-size: 75;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+            line-height: 0;
         }
 
         .action-button {
