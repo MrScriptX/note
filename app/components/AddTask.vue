@@ -1,27 +1,27 @@
 <template>
     <Page>
-        <ScrollView>
+        <ScrollView class="root">
             <StackLayout class="form">
                 <label class="title">{{ category }}</label>
             
                 <StackLayout class="field">
                     <label>{{ form[category].name }}</label>
-                    <TextField class="text-input" :text="name" />
+                    <TextField class="text-input" v-model="name" />
                 </StackLayout>
 
                 <StackLayout class="field">
                     <label>{{ form[category].date }}</label>
-                    <DatePicker :date="date" />
+                    <DatePicker v-model="date" />
                 </StackLayout>
 
                 <StackLayout class="field">
                     <label>{{ form[category].start_time }}</label>
-                    <TimePicker :time="start_time" />
+                    <TimePicker v-model="start_time" />
                 </StackLayout>
            
                 <StackLayout v-if="category != 'food'">
                     <label>{{ form[category].end_time }}</label>
-                    <TimePicker :time="end_time" />
+                    <TimePicker v-model="end_time" />
                 </StackLayout>
 
                 <FlexboxLayout class="action" orientation="horizontal">
@@ -81,7 +81,7 @@ export default class AddTask extends Vue {
             time_end: this.end_time ? end_time_str : undefined
         };
 
-        this.$modal?.close(task)
+        this.$modal?.close(task);
     }
 
     onClose(args: EventData) {
@@ -93,9 +93,12 @@ export default class AddTask extends Vue {
 <style scoped lang="scss">
 .form {
     font-family: 'DMSans-Bold';
+    color:#000;
+
+    background-color: #fff;
 
     .title {
-        font-size: 100;
+        font-size: 90;
         font-weight: bold;
         text-align: center;
         text-transform: capitalize;
@@ -107,6 +110,10 @@ export default class AddTask extends Vue {
         border-bottom-width: 1;
         
         font-size: 20;
+
+        label {
+            text-shadow: 2 2 0 rgba($color: #c52323, $alpha: 1.0);
+        }
     }
 
     .action {

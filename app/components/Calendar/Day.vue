@@ -1,5 +1,5 @@
 <template>
-    <FlexboxLayout flexDirection="column" class="day-card theme-peaceful-cottage" :class="color">
+    <FlexboxLayout flexDirection="column" class="day-card theme-afternoon" :class="color">
         <label class="title">{{ data.category }}</label>
         <FlexboxLayout flexDirection="row">
             <label class="task">{{ data.name }}</label>

@@ -27,6 +27,7 @@
 import Vue from 'nativescript-vue';
 import Component from 'vue-class-component';
 import { EventData, FlexboxLayout, ScrollView, StackLayout, Label, GridLayout, Button } from '@nativescript/core';
+import Store from '~/store/store';
 
 // components
 import Day from './Calendar/Day.vue';
@@ -68,6 +69,8 @@ export default class Calendar extends Vue {
     public time = '';
 
     beforeMount() {
+        Store.open();
+
         const today = new Date();
 
         this.date.day = today.getDate();
@@ -91,8 +94,9 @@ export default class Calendar extends Vue {
 
     onTapAdd(args: EventData) {
         this.$showModal(AddTask, { fullscreen: true, props: { category: 'food' } })
-            .then(data => {
-
+            .then((data: task) => {
+                Store._tasks.push(data);
+                Store.save();
             });
     }
 
