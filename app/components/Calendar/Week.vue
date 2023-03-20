@@ -20,10 +20,10 @@ import task from '~/types/task'
 
 @Component({
 })
-export default class DayCard extends Vue {
+export default class WeekCard extends Vue {
     @Prop() id!: number
     @Prop() color!: String
-    @Prop() data!: task
+    @Prop() data!: Array<task>[]
 
     public theme: string = AppSettings.getString('theme');
 

@@ -14,10 +14,18 @@
                     <Button class="action-button" row="2" col="1" text="+" @tap="onTapAdd"></Button>
                 </GridLayout>
             </FlexboxLayout>
-            <ListView v-for="(_task, index) in _tasks" :key="index" ref="task_list" height="100%" separatorColor="transparent">
+            <!-- <ListView v-for="(_task, index) in _tasks" :key="index" ref="task_list" height="100%" separatorColor="transparent">
                 <v-template>
                     <StackLayout class="task-wrapper">
                         <Day :id="index" :data="_task" :color="'color' + ((index % 4) + 1)"></Day>
+                    </StackLayout>
+                </v-template>
+            </ListView> -->
+
+            <ListView v-for="(_task, index) in data" :key="index" ref="task_list" height="100%" separatorColor="transparent">
+                <v-template>
+                    <StackLayout class="task-wrapper">
+                        <WeekCard :data="_task" :color="'color1'"></WeekCard>
                     </StackLayout>
                 </v-template>
             </ListView>
@@ -35,6 +43,7 @@ import Store from '~/store/store';
 import Day from './Calendar/Day.vue';
 import SplitMenu from './UI/SplitMenu.vue';
 import AddTask from './AddTask.vue';
+import WeekCard from './Calendar/Week.vue';
 
 // types
 import task from '~/types/task'
@@ -47,6 +56,13 @@ import task from '~/types/task'
     }
 })
 export default class Calendar extends Vue {
+    public data: Array<task>[] = [
+        [ { category: "food", name: "couscous", date: "2023-03-20", time_start: "12:00" }, 
+        { category: "food", name: "pates", date: "2023-03-20", time_start: "19:00" } ],
+        [ { category: "food", name: "burger", date: "2023-03-21", time_start: "12:00" }, 
+        { category: "food", name: "epinard", date: "2023-03-21", time_start: "20:00" } ]
+    ];
+
     public _tasks: task[] = [];
 
     public months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
