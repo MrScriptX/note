@@ -41,6 +41,11 @@ class Store {
             console.log(err);
         }
     }
+
+    async clear(): Promise<void> {
+        this._tasks = [];
+        this.save();
+    }
 }
 
 // singleton instance

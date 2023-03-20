@@ -26,6 +26,8 @@ export default class SplitMenu extends Vue {
                 break;
             }
         }
+
+        this.$emit('changeTab', this.selectedIndex);
     }
 }
 </script>

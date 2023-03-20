@@ -1,6 +1,6 @@
 <template>
     <StackLayout>
-        <SplitMenu margin="5 0"></SplitMenu>
+        <SplitMenu margin="5 0" @changeTab="onChangeFilter"></SplitMenu>
         <StackLayout class="calendar-page" height="100%">
             <FlexboxLayout class="header" flexDirection="row">
                 <GridLayout columns="5*, 3*" rows="25, 80, 75">
@@ -14,11 +14,13 @@
                     <Button class="action-button" row="2" col="1" text="+" @tap="onTapAdd"></Button>
                 </GridLayout>
             </FlexboxLayout>
-            <ScrollView height="100%" orientation="vertical">
-                <StackLayout>
-                    <Day v-for="(item, index) in data" :key="index" @id=index :data="item" :color="'color' + ((index % 4) + 1)"></Day>
-                </StackLayout>
-            </ScrollView>
+            <ListView v-for="(_task, index) in _tasks" :key="index" ref="task_list" height="100%" separatorColor="transparent">
+                <v-template>
+                    <StackLayout class="task-wrapper">
+                        <Day :id="index" :data="_task" :color="'color' + ((index % 4) + 1)"></Day>
+                    </StackLayout>
+                </v-template>
+            </ListView>
         </StackLayout>
     </StackLayout>
 </template>
@@ -26,7 +28,7 @@
 <script lang="ts">
 import Vue from 'nativescript-vue';
 import Component from 'vue-class-component';
-import { EventData, FlexboxLayout, ScrollView, StackLayout, Label, GridLayout, Button } from '@nativescript/core';
+import { EventData, FlexboxLayout, StackLayout, Label, GridLayout, Button, ListView } from '@nativescript/core';
 import Store from '~/store/store';
 
 // components
@@ -45,16 +47,7 @@ import task from '~/types/task'
     }
 })
 export default class Calendar extends Vue {
-    public data: task[] = [
-        { category: "Food", name: "spaghetti bolo", date: "2023-03-15", time_start: "12:00" },
-        { category: "Food", name: "risotto", date: "2023-03-16", time_start: "13:00" },
-        { category: "Food", name: "soupe au saumon", date: "2023-03-17" },
-        { category: "Food", name: "steak frite", date: "2023-03-18" },
-        { category: "Food", name: "pizza", date: "2023-03-19" },
-        { category: "Food", name: "salade cesar", date: "2023-03-20" },
-        { category: "Food", name: "swandwich", date: "2023-03-21" },
-        { category: "Food", name: "restaurant", date: "2023-03-22" }
-    ]
+    public _tasks: task[] = [];
 
     public months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
     public days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satursday"];
@@ -68,17 +61,32 @@ export default class Calendar extends Vue {
 
     public time = '';
 
-    beforeMount() {
-        Store.open();
+    async created() {
+        Store.sync_task().then((data) => {
+            if (data == null)
+            {
+                console.error("No data found");
+                return;
+            }
 
+            this._tasks = data;
+            this.refresh();
+
+            setInterval(this.update_time, 2000);
+        });
+    }
+
+    async beforeMount() {
         const today = new Date();
 
         this.date.day = today.getDate();
         this.date.month = today.getMonth();
         this.date.year = today.getFullYear();
         this.date.week_day = today.getDay();
+    }
 
-        setInterval(this.update_time, 2000);
+    async beforeUpdate() {
+        console.log('before update');
     }
 
     update_time(): void {
@@ -92,16 +100,41 @@ export default class Calendar extends Vue {
         this.time = hh_s + ":" + mm_s;
     }
 
+    onChangeFilter(index: number) {
+        if (index == 0)
+        {
+            this._tasks = Store._tasks.filter(element => {
+                const d = new Date(element.date);
+                if (d.getDay() == this.date.day && d.getMonth() == this.date.month && d.getFullYear() == this.date.year)
+                    return true;
+
+                return false;
+            });
+        }
+    }
+
     onTapAdd(args: EventData) {
         this.$showModal(AddTask, { fullscreen: true, props: { category: 'food' } })
             .then((data: task) => {
+                if (data == null || !data)
+                    return;
+                
                 Store._tasks.push(data);
                 Store.save();
+                this._tasks = Store._tasks;
+
+                this.refresh();
             });
     }
 
     pad(num: number, length: number) {
         return String(num).padStart(length, '0');
+    }
+
+    refresh() {
+        const task_list = <ListView | undefined>this.$refs.task_list;
+        if (task_list)
+            task_list.refresh();
     }
 }
 </script>
@@ -166,6 +199,11 @@ export default class Calendar extends Vue {
             color: #fff;
             background-color: #000;
         }
+    }
+
+    .task-wrapper {
+        margin: 0 0;
+        padding: 0 0;
     }
 }
 </style>

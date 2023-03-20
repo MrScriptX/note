@@ -1,6 +1,6 @@
 <template>
     <Page>
-        <ScrollView class="root">
+        <ScrollView class="root" height="100%">
             <StackLayout class="form">
                 <label class="title">{{ category }}</label>
             
@@ -47,9 +47,9 @@ export default class AddTask extends Vue {
     @Prop() category!: string;
 
     public name: string = "";
-    public start_time?: Date;
+    public start_time: Date = new Date();
     public end_time?: Date;
-    public date?: Date;
+    public date: Date = new Date();
 
     public form: { [key: string]: any } = {
         default : {

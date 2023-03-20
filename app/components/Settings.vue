@@ -1,68 +1,84 @@
 
 <template>
-    <StackLayout>
-        <Label>Settings</Label>
-        <ListView v-for="category in categories" @itemTap="OnEditCategory">
-            <v-template>
-                <Label :text="category" />
-            </v-template>
-        </ListView>
-        <Button text="New category" @tap="OnNewCategory"></Button>
-    </StackLayout>
+    <ScrollView heigth="100%">
+        <StackLayout class="page">
+            <Label class="title">Settings</Label>
+            <StackLayout class="category">
+                <label class="header">Theme</label>
+                <ListPicker :items="themes" :selectedIndex="theme_index" @selectedIndexChange="OnThemeChange" />
+            </StackLayout>
+            <StackLayout class="category">
+                <label class="header">Developper Options</label>
+                <Button text="Clear data" @tap="OnClearData"></Button>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
 </template>
 
 <script lang="ts">
-import { EventData, PromptOptions, inputType, capitalizationType, prompt, PromptResult, ListView, ItemEventData } from '@nativescript/core';
+import { EventData, ItemEventData, confirm, ScrollView, ListPicker } from '@nativescript/core';
 import Vue from 'nativescript-vue';
 import Component from 'vue-class-component';
+import Store from '~/store/store';
+import * as AppSettings from '@nativescript/core/application-settings';
 
 @Component
 export default class Settings extends Vue {
-    public categories: string[] = [];
+    public theme_index = 0;
+    public themes = ["afternoon", "rainbow", "peaceful-cottage"];
 
-    public OnNewCategory(args: EventData): void {
-        const actionOptions: PromptOptions = {
-            title: 'Ajouter une catégorie',
-            message: 'Enter a new category name',
-            okButtonText: "OK",
-            cancelButtonText: 'Cancel',
-            inputType: inputType.text,
-            cancelable: true, // Android only
-            capitalizationType: capitalizationType.none
-        };
+    public beforeMount() {
+        const theme = AppSettings.getString('theme');
+        if (!theme)
+        {
+            AppSettings.setString('theme', this.themes[0]);
+            return;
+        }
 
-        prompt(actionOptions).then((result: PromptResult) => {
-            console.log('new category : ', result)
-
-            if (result.text === 'Cancel')
-                return;
-
-            this.categories.push(result.text);
-        });
+        for (let i = 0; i < this.themes.length; i++)
+        {
+            if (theme == this.themes[i])
+            {
+                this.theme_index = i;
+                break;
+            }
+        }
     }
 
-    public OnEditCategory(args: ItemEventData): void {
-        const actionOptions: PromptOptions = {
-            title: 'Edit',
-            defaultText: this.categories[args.index],
-            okButtonText: "Modify",
-            neutralButtonText: "Delete",
-            cancelButtonText: 'Cancel',
-            inputType: inputType.text,
-            cancelable: true, // Android only
-            capitalizationType: capitalizationType.none
-        };
+    public OnThemeChange(args: EventData): void {
+        const picker = <ListPicker><unknown>args.object;
+        AppSettings.setString('theme', this.themes[picker.selectedIndex]);
+    }
 
-        prompt(actionOptions).then((result: PromptResult) => {
-            console.log('new category : ', result)
-
-            if (result.text === 'Cancel')
-                return;
-            else if (result.text === 'Delete')
-                return; // delete item
-            
-            this.categories.push(result.text);
+    public OnClearData(args: ItemEventData): void {
+        confirm({
+            title: "Delete all data",
+            message: "Do you want to clear local data",
+            okButtonText: "Yes",
+            cancelButtonText: "No"
+        })
+        .then((result) => {
+            if (result)
+                Store.clear();
         });
     }
 }
 </script>
+
+<style scoped lang="scss">
+.page {
+    font-family: 'DMSans-Bold';
+
+    .title {
+        font-size: 60;
+        text-align: center;
+    }
+
+    .category {
+        margin: 0 20;
+        .header {
+            font-size: 15;
+        }
+    }
+}
+</style>

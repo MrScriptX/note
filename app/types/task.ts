@@ -1,4 +1,4 @@
-export type task = {
+type task = {
     category: string,
     name: string,
     date: string,
