@@ -22,10 +22,10 @@
                 </v-template>
             </ListView> -->
 
-            <ListView v-for="(_task, index) in data" :key="index" ref="task_list" height="100%" separatorColor="transparent">
+            <ListView v-for="(day, index) in week_days" :key="index" ref="task_list" height="100%" separatorColor="transparent">
                 <v-template>
                     <StackLayout class="task-wrapper">
-                        <WeekCard :data="_task" :color="'color1'"></WeekCard>
+                        <WeekCard :id="index" :date="day" :data="data[index]" :color="'color1'"></WeekCard>
                     </StackLayout>
                 </v-template>
             </ListView>
@@ -52,15 +52,21 @@ import task from '~/types/task'
     components: {
         Day,
         SplitMenu,
-        AddTask
+        AddTask,
+        WeekCard
     }
 })
 export default class Calendar extends Vue {
+    public week_days: string[] = ["2023-03-19", "2023-03-20", "2023-03-21", "2023-03-22", "2023-03-23", "2023-03-24"];
     public data: Array<task>[] = [
+        [],
         [ { category: "food", name: "couscous", date: "2023-03-20", time_start: "12:00" }, 
         { category: "food", name: "pates", date: "2023-03-20", time_start: "19:00" } ],
         [ { category: "food", name: "burger", date: "2023-03-21", time_start: "12:00" }, 
-        { category: "food", name: "epinard", date: "2023-03-21", time_start: "20:00" } ]
+        { category: "food", name: "epinard", date: "2023-03-21", time_start: "20:00" } ],
+        [],
+        [],
+        []
     ];
 
     public _tasks: task[] = [];

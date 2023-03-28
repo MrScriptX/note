@@ -21,7 +21,7 @@
 }
 
 @mixin themable($theme-name, $color1, $color2, $color3, $color4) {
-    .day-card {
+    .day-card, .week-card {
         &.#{$theme-name} {
             &.color1 {
                 background-color: $color1;
