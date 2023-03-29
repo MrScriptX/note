@@ -36,11 +36,13 @@ export default class WeekCard extends Vue {
     public theme: string = AppSettings.getString('theme');
     public week_day: number = 0;
 
-    onLoaded() {
-        this.theme = AppSettings.getString('theme');
-
+    async beforeMount() {
         const current_date = new Date(<string>this.date);
         this.week_day = current_date.getDay();
+    }
+
+    onLoaded() {
+        this.theme = AppSettings.getString('theme');
     }
 }
 </script>
@@ -61,7 +63,7 @@ export default class WeekCard extends Vue {
 
     .title {
         font-family: 'DMSans-Bold';
-        font-size: 60;
+        font-size: 50;
         font-weight: bold;
 
         color: rgba(#000, 0.3);

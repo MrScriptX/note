@@ -14,21 +14,20 @@
                     <Button class="action-button" row="2" col="1" text="+" @tap="onTapAdd"></Button>
                 </GridLayout>
             </FlexboxLayout>
-            <!-- <ListView v-for="(_task, index) in _tasks" :key="index" ref="task_list" height="100%" separatorColor="transparent">
+            <ListView v-if="_current_tab == 0" v-for="(_task, index) in _tasks" :key="index" ref="task_list" height="100%" separatorColor="transparent">
                 <v-template>
                     <StackLayout class="task-wrapper">
                         <Day :id="index" :data="_task" :color="'color' + ((index % 4) + 1)"></Day>
                     </StackLayout>
                 </v-template>
-            </ListView> -->
-
-            <ListView v-for="(day, index) in week_days" :key="index" ref="task_list" height="100%" separatorColor="transparent">
+            </ListView>
+            <!-- <ListView v-else-if="_current_tab == 1" v-for="(_day, index) in week_days" :key="index" ref="task_list" height="100%" separatorColor="transparent">
                 <v-template>
                     <StackLayout class="task-wrapper">
-                        <WeekCard :id="index" :date="day" :data="data[index]" :color="'color1'"></WeekCard>
+                        <WeekCard :id="index" :date="_day" :data="data[index]" :color="'color' + ((index % 4) + 1)"></WeekCard>
                     </StackLayout>
                 </v-template>
-            </ListView>
+            </ListView> -->
         </StackLayout>
     </StackLayout>
 </template>
@@ -81,7 +80,9 @@ export default class Calendar extends Vue {
         week_day: 0
     };
 
-    public time = '';
+    public time = this.update_time();
+
+    public _current_tab = 0;
 
     async created() {
         Store.sync_task().then((data) => {
@@ -111,7 +112,7 @@ export default class Calendar extends Vue {
         console.log('before update');
     }
 
-    update_time(): void {
+    update_time(): string {
         let date = new Date(); 
         let hh = date.getUTCHours();
         let mm = date.getMinutes();
@@ -120,6 +121,8 @@ export default class Calendar extends Vue {
         const mm_s = (mm < 10) ? "0" + mm : mm;
     
         this.time = hh_s + ":" + mm_s;
+
+        return hh_s + ":" + mm_s;
     }
 
     onChangeFilter(index: number) {
@@ -132,6 +135,10 @@ export default class Calendar extends Vue {
 
                 return false;
             });
+        }
+        if (index == 1)
+        {
+            this._current_tab = 1;
         }
     }
 
